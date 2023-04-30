@@ -18,6 +18,20 @@ mongoose
   })
   .catch((err) => console.log(`Connection error: `, err));
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`App started on port ${port}...`);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.log('Unhandled rejection!');
+  console.log(err);
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+process.on('uncaughtException', (err) => {
+  console.log('Uncaught exception!');
+  console.log(err.message);
+  process.exit(1);
 });
